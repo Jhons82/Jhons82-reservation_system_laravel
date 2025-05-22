@@ -64,6 +64,28 @@ TODO: Rutas y vistas para breeze
     1.  php artisan serve
 
 
+TODO: Laravel guarda archivos subidos por los usuarios (como imágenes o documentos) en el disco storage/app/public. Sin embargo, esos archivos no son accesibles desde el navegador por defecto.
+   Cuando ejecutas:
+   php artisan storage:link
+
+   Laravel crea un enlace simbólico que conecta:
+   public/storage → storage/app/public
+
+   Esto permite que puedas acceder a los archivos subidos mediante URLs como:
+   http://tusitio.com/storage/archivo.jpg
+   
+   TODO: ¿Cuándo deberías usarlo?
+   Cuando manejas subida de archivos, como fotos de perfil, documentos, etc.
+
+   Después de un deploy en un nuevo entorno o servidor.
+
+   Si ves errores como 404 Not Found al intentar ver imágenes o archivos subidos.
+
+
+
+
+
+
 
 TODO: Para modificar columnas existentes de una tabla, asegúrate de tener instalada la extensión doctrine/dbal
 

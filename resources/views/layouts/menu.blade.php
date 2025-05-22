@@ -7,7 +7,7 @@
                 <img src="{{ asset('assets/images/logo_sm_vf.png') }}" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="assets/images/logo-dark.png" alt="" height="17">
+                <img src="{{ asset('assets/images/logo-dark.png') }}" alt="" height="17">
             </span>
         </a>
         <!-- Light Logo-->
@@ -85,7 +85,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#">
+                        <a class="nav-link menu-link" href="{{ route('usuarios.index') }}">
                             <i class="ri-account-circle-line"></i> <span>Mant. Usuarios</span>
                         </a>
                     </li>
