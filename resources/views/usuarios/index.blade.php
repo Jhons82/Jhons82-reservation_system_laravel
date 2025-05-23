@@ -45,10 +45,10 @@
                                     <td>{{ $usuario->role->name }}</td>
                                     <td>
                                         <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-warning btn-sm btn-label waves-effect waves-light rounded-pill"><i class="ri-edit-box-line label-icon align-middle rounded-pill fs-16 me-2"></i>Editar</a>
-                                        <form action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" style="display:inline;">
+                                        <button type="submit" class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill" onclick="confirmDeletion({{ $usuario->id }})"><i class="ri-delete-bin-line label-icon align-middle rounded-pill fs-16 me-2"></i>Eliminar</button>
+                                        <form id="delete-form-{{ $usuario->id }}" action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill"><i class="ri-delete-bin-line label-icon align-middle rounded-pill fs-16 me-2"></i>Eliminar</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -99,4 +99,22 @@
         </script>
         
     @endif
+    <script>
+        function confirmDeletion(usuarioId) {
+            Swal.fire({
+                title: "Está seguro de Eliminar el Usuario?",
+                text: "¡No podrás revertir esto!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Si, Eliminar!",
+                cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('delete-form-' + usuarioId).submit();
+                    }
+            });
+        }
+    </script>
 @endpush
