@@ -62,19 +62,18 @@ class UserController extends Controller
             'nombres' => 'required|string|max:255',
             'apellidos' => 'required|string|max:255',
             'telefono' => 'required|string|max:15',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id, // Permite el mismo email para el usuario actual
             'rol_id' => 'required|integer',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'password' => 'nullable|string|min:8|confirmed',
         ]);
 
         $usuario = User::findOrFail($id);
 
         $data = $request->only(['nombres', 'apellidos', 'telefono', 'email', 'rol_id']);
 
-        if ($request->filled('password')) {
+        /* if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
-        }
+        } */
 
         if ($request->hasFile('foto')) {
             // Guardar la nueva foto
@@ -105,4 +104,4 @@ class UserController extends Controller
 
         return redirect()->route('usuarios.index')->with('success', 'Usuario eliminado exitosamente.');
     }
-}/* <img src="{{ asset('storage/' . $usuario->foto) }}" alt="Foto de perfil" width="100"> */
+}
