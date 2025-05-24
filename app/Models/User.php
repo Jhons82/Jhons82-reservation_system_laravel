@@ -62,4 +62,14 @@ class User extends Authenticatable
     public function consultantReservations() {
         return $this->hasMany(Reservation::class, 'consultant_id');
     }
+    // Badge class for the role
+    public function getRolBadgeClassAttribute() {
+        $roleName = strtolower(trim($this->role->name ?? ''));
+        return match ($roleName) {
+            'administrador' => 'badge bg-dark',
+            'asesor' => 'badge bg-success',
+            'usuario' => 'badge bg-primary',
+            default => 'badge bg-danger',
+        };
+    }
 }

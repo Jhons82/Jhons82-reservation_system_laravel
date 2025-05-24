@@ -67,13 +67,13 @@
                     <li class="menu-title"><i class="ri-more-fill"></i> <span>Administrador</span></li>
 
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#">
+                        <a class="nav-link menu-link" href="{{ route('reservations.create') }}">
                             <i class="ri-reserved-line"></i> <span>Nueva Reserva</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#">
+                        <a class="nav-link menu-link" href="{{ route('reservations.index') }}">
                             <i class="ri-stack-line"></i> <span>Consultar Reserva</span>
                         </a>
                     </li>

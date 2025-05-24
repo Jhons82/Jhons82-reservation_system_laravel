@@ -13,7 +13,10 @@ class RolesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $roles = ['Administador','Asesor', 'Usuario'];
+        // Corrige el nombre mal escrito en el registro existente
+        /* Role::where('name', 'Administador')->update(['name' => 'Administrador']); */
+        
+        $roles = ['Administrador','Asesor', 'Usuario'];
 
         foreach ($roles as $role) {
             Role::firstOrCreate(['name' => $role]);

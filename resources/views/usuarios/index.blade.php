@@ -42,7 +42,7 @@
                                     <td>{{ $usuario->apellidos }}</td>
                                     <td>{{ $usuario->email }}</td>
                                     <td>{{ $usuario->telefono }}</td>
-                                    <td>{{ $usuario->role->name }}</td>
+                                    <td><span class="{{ $usuario->rol_badge_class }}">{{ ucfirst($usuario->role->name) }}</span></td>
                                     <td>
                                         <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-warning btn-sm btn-label waves-effect waves-light rounded-pill"><i class="ri-edit-box-line label-icon align-middle rounded-pill fs-16 me-2"></i>Editar</a>
                                         <button type="submit" class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill" onclick="confirmDeletion({{ $usuario->id }})"><i class="ri-delete-bin-line label-icon align-middle rounded-pill fs-16 me-2"></i>Eliminar</button>

@@ -15,9 +15,9 @@ class ReservationController extends Controller
 
     public function create() {
         $users = User::where('rol_id', 3)->whereNull('deleted_at')->get();
-        $consultans = User::where('rol_id', 2)->whereNull('deleted_at')->get();
+        $consultants = User::where('rol_id', 2)->whereNull('deleted_at')->get();
 
-        return view('reservations.create', compact('users', 'consultans'));
+        return view('reservations.create', compact('users', 'consultants'));
     }
 
     public function store(Request $request) {
