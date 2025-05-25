@@ -24,12 +24,12 @@ class ReservationController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'consultant_id' => 'required|exists:users,id',
-            'reservation_date' => 'required|date',
-            'start_time' => 'required|data_format:H:i|after_or_equal:09:00|before_or_equal:16:00',
-            'end_time' => 'required|data_format:H:i|before_or_equal:16:00',
-            'reservation_status' => 'required|in:pendiente, confirmada, cancelada',
+            'reservation_date' => 'required|date_format:Y-m-d',
+            'start_time' => 'required|date_format:H:i|after_or_equal:09:00|before_or_equal:16:00',
+            'end_time' => 'required|date_format:H:i|before_or_equal:17:00',
+            'reservation_status' => 'required|in:pendiente,confirmada,cancelada',
             'total_amount' => 'required|numeric|min:0',
-            'payment_status' => 'required|in:pendiente, pagado, fallido',
+            'payment_status' => 'required|in:pendiente,pagado,fallido',
         ]);
 
         $reservation = Reservation::create([
@@ -43,6 +43,6 @@ class ReservationController extends Controller
             'payment_status' => $request->payment_status,
         ]);
 
-        return redirect()->route('resevations.index')->with('success', 'Reservación creada con éxito');
+        return redirect()->route('reservations.index')->with('success', 'Reservación creada con éxito');
     }
 }
