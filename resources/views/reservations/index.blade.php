@@ -50,7 +50,7 @@
                                     </td>
                                     <td><span class="{{ $reservation->reservation_badge_class }}">{{ $reservation->reservation_status }}</span></td>
                                     <td>
-                                        <a href="#" class="btn btn-warning btn-sm btn-label waves-effect waves-light rounded-pill"><i class="ri-edit-box-line label-icon align-middle rounded-pill fs-16 me-2"></i>Editar</a>
+                                        <a href="{{ route('reservations.edit', $reservation->id) }}" class="btn btn-warning btn-sm btn-label waves-effect waves-light rounded-pill"><i class="ri-edit-box-line label-icon align-middle rounded-pill fs-16 me-2"></i>Editar</a>
                                         <button type="submit" class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill"><i class="ri-delete-bin-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
                                         <form id="" action="" method="POST" style="display:inline;">
                                             @csrf

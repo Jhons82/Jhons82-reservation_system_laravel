@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Reservation;
+use Carbon\Carbon;
 
 class ReservationController extends Controller
 {
@@ -44,5 +45,43 @@ class ReservationController extends Controller
         ]);
 
         return redirect()->route('reservations.index')->with('success', 'Reservación creada con éxito');
+    }
+
+    public function edit(string $id) {
+        $reservation = Reservation::findOrFail($id);
+        $reservation->start_time = Carbon::parse($reservation->start_time)->format('H:i');
+        $reservation->end_time = Carbon::parse($reservation->end_time)->format('H:i');
+
+        $users = User::where('rol_id', 3)->whereNull('deleted_at')->get();
+        $consultants = User::where('rol_id', 2)->whereNull('deleted_at')->get();
+
+        return view('reservations.edit', compact('reservation', 'users', 'consultants'));
+    }
+
+    public function update(Request $request, string $id) {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'consultant_id' => 'required|exists:users,id',
+            'reservation_date' => 'required|date_format:Y-m-d',
+            'start_time' => 'required|date_format:H:i|after_or_equal:09:00|before_or_equal:16:00',
+            'end_time' => 'required|date_format:H:i|before_or_equal:17:00',
+            'reservation_status' => 'required|in:pendiente,confirmada,cancelada',
+            'total_amount' => 'required|numeric|min:0',
+            'payment_status' => 'required|in:pendiente,pagado,fallido',
+        ]);
+
+        $reservation = Reservation::findOrFail($id);
+        $reservation->update([
+            'user_id' => $request->user_id,
+            'consultant_id' => $request->consultant_id,
+            'reservation_date' => $request->reservation_date,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'reservation_status' => $request->reservation_status,
+            'total_amount' => $request->total_amount,
+            'payment_status' => $request->payment_status,
+        ]);
+
+        return redirect()->route('reservations.index')->with('success', 'Reservación actualizada con éxito');
     }
 }
