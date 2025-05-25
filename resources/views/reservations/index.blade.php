@@ -51,11 +51,7 @@
                                     <td><span class="{{ $reservation->reservation_badge_class }}">{{ $reservation->reservation_status }}</span></td>
                                     <td>
                                         <a href="{{ route('reservations.edit', $reservation->id) }}" class="btn btn-warning btn-sm btn-label waves-effect waves-light rounded-pill"><i class="ri-edit-box-line label-icon align-middle rounded-pill fs-16 me-2"></i>Editar</a>
-                                        <button type="submit" class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill"><i class="ri-delete-bin-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
-                                        <form id="" action="" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
+                                        <button type="button" class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill btn-cancel" data-id="{{ $reservation->id }}"><i class="ri-delete-bin-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
                                     </td>
                                 </tr>
                                 
@@ -87,6 +83,72 @@
                     }
                 }
             });
+        });
+
+        $(document).on('click','.btn-cancel', function(e) {
+            e.preventDefault();
+            var reservationId = $(this).data('id');
+            
+            Swal.fire({
+                title: "Cancelar Reservación",
+                text: "Por favor, ingresa el motivo de la cancelación",
+                icon: "warning",
+                input: "textarea",
+                inputPlaceholder: "Escribe el motivo de la cancelación...",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Cancelar Reservación",
+                cancelButtonText: "Cerrar",
+                preConfirm: (cancellationReason) => {
+                    if (!cancellationReason) {
+                        Swal.showValidationMessage('Es necesario ingresar un motivo de cancelación');
+                        return false;
+                    } else {
+                        return new Promise((resolve, reject) => {
+                            $.ajax({
+                                url: "{{ route('reservations.cancel') }}", // Ruta para cancelar la reserva
+                                method: "POST", // Método POST para enviar la solicitud
+                                data: {
+                                    _token: "{{ csrf_token() }}", // Token CSRF para la seguridad de Laravel
+                                    reservation_id: reservationId, // ID de la reserva
+                                    cancellation_reason: cancellationReason, // Razón de la cancelación
+                                },
+                                success: function(response) {
+                                    if (response.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Reservación Cancelada',
+                                            text: response.message,
+                                            showConfirmButton: false,
+                                            timer: 3000
+                                        }).then(() => {
+                                            location.reload();
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'error',
+                                            text: response.message,
+                                            showConfirmButton: true,
+                                        });
+                                    }
+                                    resolve();
+                                },
+                                error: function(xhr, status, error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: 'Ocurrió un error al cancelar la reservación. Por favor, inténtalo de nuevo.',
+                                        showConfirmButton: true,
+                                    });
+                                    reject();
+                                }
+                            });
+                        });
+                    }
+                }
+            });
         })
     </script>
     @if (session('success'))
@@ -106,3 +168,4 @@
         
     @endif
 @endpush
+

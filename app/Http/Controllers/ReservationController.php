@@ -84,4 +84,21 @@ class ReservationController extends Controller
 
         return redirect()->route('reservations.index')->with('success', 'Reservación actualizada con éxito');
     }
+
+    public function cancel(Request $request) {
+        $request->validate([
+            'reservation_id' => 'required|exists:reservations,id',
+            'cancellation_reason' => 'required|string|max:255',
+        ]);
+
+        $reservation = Reservation::findOrFail($request->reservation_id);
+        $reservation->reservation_status = 'cancelada';
+        $reservation->cancellation_reason = $request->cancellation_reason;
+        $reservation->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Reservación cancelada con éxito'
+        ]);
+    }
 }

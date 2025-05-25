@@ -23,4 +23,6 @@ Route::resource('usuarios', UserController::class);
 
 Route::resource('reservations', ReservationController::class);
 
+Route::post('reservations.cancel', [ReservationController::class, 'cancel'])->name('reservations.cancel');
+
 require __DIR__.'/auth.php';
