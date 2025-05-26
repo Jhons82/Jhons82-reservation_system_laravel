@@ -50,8 +50,13 @@
                                     </td>
                                     <td><span class="{{ $reservation->reservation_badge_class }}">{{ $reservation->reservation_status }}</span></td>
                                     <td>
-                                        <a href="{{ route('reservations.edit', $reservation->id) }}" class="btn btn-warning btn-sm btn-label waves-effect waves-light rounded-pill"><i class="ri-edit-box-line label-icon align-middle rounded-pill fs-16 me-2"></i>Editar</a>
-                                        <button type="button" class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill btn-cancel" data-id="{{ $reservation->id }}"><i class="ri-delete-bin-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
+                                        @if ($reservation->reservation_status == 'Cancelada')
+                                            <button class="btn btn-warning btn-sm btn-label waves-effect waves-light rounded-pill" disabled><i class="ri-edit-box-line label-icon align-middle rounded-pill fs-16 me-2"></i>Editar</button>
+                                            <button class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill btn-cancel" disabled><i class="ri-delete-bin-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
+                                        @else
+                                            <a href="{{ route('reservations.edit', $reservation->id) }}" class="btn btn-warning btn-sm btn-label waves-effect waves-light rounded-pill"><i class="ri-edit-box-line label-icon align-middle rounded-pill fs-16 me-2"></i>Editar</a>
+                                            <button type="button" class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill btn-cancel" data-id="{{ $reservation->id }}"><i class="ri-delete-bin-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
+                                        @endif
                                     </td>
                                 </tr>
                                 

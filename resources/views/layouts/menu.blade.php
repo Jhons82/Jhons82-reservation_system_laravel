@@ -89,6 +89,11 @@
                             <i class="ri-account-circle-line"></i> <span>Mant. Usuarios</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{ route('reservations.calendar') }}">
+                            <i class="ri-calendar-todo-line"></i> <span data-key="t-layouts">Calendario</span>
+                        </a>
+                    </li> 
                 @endif
             </ul>
         </div>

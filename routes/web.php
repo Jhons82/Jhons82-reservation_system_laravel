@@ -19,10 +19,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+
+Route::get('reservations/calendar', function() {
+    return view('reservations.calendar');
+})->name('reservations.calendar');
+
+Route::get('/administrator/fullcalendar', [ReservationController::class, 'getAllReservations'])->name('reservations.data');
+
 Route::resource('usuarios', UserController::class);
 
 Route::resource('reservations', ReservationController::class);
 
 Route::post('reservations.cancel', [ReservationController::class, 'cancel'])->name('reservations.cancel');
+
+
 
 require __DIR__.'/auth.php';

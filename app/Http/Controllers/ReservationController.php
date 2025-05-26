@@ -101,4 +101,53 @@ class ReservationController extends Controller
             'message' => 'Reservación cancelada con éxito'
         ]);
     }
+
+    public function getAllReservations() {
+        // Cargar solo las relaciones y campos necesarios
+        $reservations = Reservation::with([
+            'user:id,nombres,apellidos',
+            'consultant:id,nombres,apellidos',
+        ])->get([
+            'id',
+            'user_id',
+            'consultant_id',
+            'reservation_date',
+            'start_time',
+            'end_time',
+            'reservation_status',
+            'payment_status',
+            'total_amount',
+            'cancellation_reason',
+        ]);
+
+        $events = $reservations->map(function ($reservation) {
+            $startTimeFormatted = Carbon::parse($reservation->start_time)->format('g:i A');
+            $endTimeFormatted = Carbon::parse($reservation->end_time)->format('g:i A');
+
+            $statusColor = match ($reservation->reservation_status) {
+                'Confirmada' => ['#cfe2ff', '#084298'],
+                'Pendiente'  => ['#d1ecf1', '#0c5460'],
+                default      => ['#f8d7da', '#842029'],
+            };
+
+            return [
+                'id' => $reservation->id,
+                'title' => "Reservación de {$reservation->user->nombres} {$reservation->user->apellidos} - Consultor: {$reservation->consultant->nombres} {$reservation->consultant->apellidos}",
+                'start' => $reservation->reservation_date,
+                'time_range' => "{$startTimeFormatted} - {$endTimeFormatted}",
+                'color' => $statusColor[0],
+                'textColor' => $statusColor[1],
+                'description' => "Reservación de {$reservation->user->nombres} {$reservation->user->apellidos} con Consultor: {$reservation->consultant->nombres} {$reservation->consultant->apellidos}",
+                'reservation_status' => $reservation->reservation_status,
+                'payment_status' => $reservation->payment_status,
+                'total_amount' => $reservation->total_amount,
+                'cancellation_reason' => $reservation->cancellation_reason,
+                'badge_class' => $reservation->reservation_badge_class,
+                'payment_badge_class' => $reservation->payment_badge_class,
+            ];
+        });
+
+        return response()->json($events);
+    }
+
 }
