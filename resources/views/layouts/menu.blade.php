@@ -30,7 +30,7 @@
             </div>
             <ul class="navbar-nav" id="navbar-nav">
                 @if (Auth::user()->rol_id === 3)
-                    <li class="menu-title"><span>Usuario</span></li>
+                    <li class="menu-title"><span>cliente</span></li>
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#">
                             <i class="ri-reserved-line"></i> <span data-key="t-dashboards">Nueva Reserva</span>
@@ -54,10 +54,10 @@
                 @endif
                 
                 @if (Auth::user()->rol_id === 2)    
-                    <li class="menu-title"><i class="ri-more-fill"></i> <span>Consultor</span></li>
+                    <li class="menu-title"><i class="ri-more-fill"></i> <span>Asesor</span></li>
 
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#">
+                        <a class="nav-link menu-link" href="{{ route('adviser.calendar') }}">
                             <i class="ri-calendar-todo-line"></i> <span data-key="t-authentication">Calendario</span>
                         </a>
                     </li>

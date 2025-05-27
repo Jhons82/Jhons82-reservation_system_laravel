@@ -20,12 +20,17 @@ Route::middleware('auth')->group(function () {
 });
 
 
-
+// Calendar for administrator
 Route::get('reservations/calendar', function() {
     return view('reservations.calendar');
 })->name('reservations.calendar');
-
 Route::get('/administrator/fullcalendar', [ReservationController::class, 'getAllReservations'])->name('reservations.data');
+
+// Calendar for adviser
+Route::get('adviser/calendar', function() {
+    return view('adviser.calendar');
+})->name('adviser.calendar');
+Route::get('/adviser/fullcalendar', [ReservationController::class, 'getAllReservationsAdviser'])->name('reservationsAdviser.data');
 
 Route::resource('usuarios', UserController::class);
 
