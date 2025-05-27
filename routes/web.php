@@ -32,6 +32,12 @@ Route::get('adviser/calendar', function() {
 })->name('adviser.calendar');
 Route::get('/adviser/fullcalendar', [ReservationController::class, 'getAllReservationsAdviser'])->name('reservationsAdviser.data');
 
+//Calendar for customer
+Route::get('customer/calendar', function() {
+    return view('customer.calendar');
+})->name('customer.calendar');
+Route::get('/customer/fullcalendar', [ReservationController::class, 'getAllReservationsCustomer'])->name('reservationsCustomer.data');
+
 Route::resource('usuarios', UserController::class);
 
 Route::resource('reservations', ReservationController::class);

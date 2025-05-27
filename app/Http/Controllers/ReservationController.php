@@ -185,4 +185,39 @@ class ReservationController extends Controller
         return response()->json($events);
     }
 
+    //Información en JSON para Calendar - Rol: Cliente
+    public function getAllReservationsCustomer() {
+
+        $userId = Auth::user()->id;
+        $reservations = Reservation::where('user_id', $userId)->get();
+
+        $events = $reservations->map(function ($reservation) {
+            $startTimeFormatted = Carbon::parse($reservation->start_time)->format('g:i A');
+            $endTimeFormatted = Carbon::parse($reservation->end_time)->format('g:i A');
+
+            $statusColor = match ($reservation->reservation_status) {
+                'Confirmada' => ['#cfe2ff', '#084298'],
+                'Pendiente'  => ['#d1ecf1', '#0c5460'],
+                default      => ['#f8d7da', '#842029'],
+            };
+
+            return [
+                'id' => $reservation->id,
+                'start' => $reservation->reservation_date,
+                'time_range' => "{$startTimeFormatted} - {$endTimeFormatted}",
+                'color' => $statusColor[0],
+                'textColor' => $statusColor[1],
+                'title' => "Reservación con el Asesor:  {$reservation->consultant->nombres} {$reservation->consultant->apellidos}",
+                'reservation_status' => $reservation->reservation_status,
+                'payment_status' => $reservation->payment_status,
+                'total_amount' => $reservation->total_amount,
+                'cancellation_reason' => $reservation->cancellation_reason,
+                'badge_class' => $reservation->reservation_badge_class,
+                'payment_badge_class' => $reservation->payment_badge_class,
+            ];
+        });
+
+        return response()->json($events);
+    }
+
 }

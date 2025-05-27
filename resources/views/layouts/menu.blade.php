@@ -42,7 +42,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#">
+                        <a class="nav-link menu-link" href="{{ route('customer.calendar') }}">
                             <i class="ri-calendar-todo-line"></i> <span data-key="t-layouts">Calendario</span>
                         </a>
                     </li> 
