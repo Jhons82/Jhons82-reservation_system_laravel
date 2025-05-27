@@ -37,7 +37,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#" >
+                        <a class="nav-link menu-link" href="{{ route('customer.index') }}" >
                             <i class="ri-stack-line"></i> <span data-key="t-apps">Consultar Reserva</span>
                         </a>
                     </li>

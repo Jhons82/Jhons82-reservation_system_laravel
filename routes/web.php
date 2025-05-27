@@ -38,6 +38,9 @@ Route::get('customer/calendar', function() {
 })->name('customer.calendar');
 Route::get('/customer/fullcalendar', [ReservationController::class, 'getAllReservationsCustomer'])->name('reservationsCustomer.data');
 
+//index for customer
+Route::get('/customer', [ReservationController::class, 'indexCustomer'])->name('customer.index');
+
 Route::resource('usuarios', UserController::class);
 
 Route::resource('reservations', ReservationController::class);

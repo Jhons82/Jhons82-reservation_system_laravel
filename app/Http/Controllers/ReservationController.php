@@ -10,9 +10,17 @@ use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
+    //Index -Admin
     public function index() {
         $reservations = Reservation::with(['user', 'consultant'])->get();
         return view('reservations.index', compact('reservations'));
+    }
+
+    //Index - Customer
+    public function indexCustomer() {
+        $customerId = Auth::user()->id;
+        $reservations = Reservation::where('user_id', $customerId)->get();
+        return view('customer.index', compact('reservations'));
     }
 
     public function create() {
