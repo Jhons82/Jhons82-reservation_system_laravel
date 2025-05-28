@@ -90,20 +90,3 @@ TODO: Laravel guarda archivos subidos por los usuarios (como imágenes o documen
 TODO: Para modificar columnas existentes de una tabla, asegúrate de tener instalada la extensión doctrine/dbal
 
 composer require doctrine/dbal
-
-
-
-
-Ventajas:
-
-Mayor rendimiento: Ideal para insertar grandes cantidades de datos rápidamente, ya que evita la sobrecarga del ORM.
-
-Simplicidad: El código es directo y fácil de entender para inserciones básicas.
-
-Desventajas:
-
-No previene duplicados: Si el seeder se ejecuta múltiples veces, puede insertar registros duplicados a menos que se implementen verificaciones adicionales.
-
-No gestiona marcas de tiempo automáticamente: Si la tabla tiene columnas created_at y updated_at, debes proporcionarlas manualmente.
-
-No activa eventos del modelo: Se omiten eventos como creating o created, lo que puede ser relevante en ciertas situaciones.

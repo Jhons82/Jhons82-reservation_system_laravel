@@ -22,12 +22,19 @@ class ReservationController extends Controller
         $reservations = Reservation::where('user_id', $customerId)->get();
         return view('customer.index', compact('reservations'));
     }
-
+    //Create - Admin
     public function create() {
         $users = User::where('rol_id', 3)->whereNull('deleted_at')->get();
         $consultants = User::where('rol_id', 2)->whereNull('deleted_at')->get();
 
         return view('reservations.create', compact('users', 'consultants'));
+    }
+    //Create - Custoner
+    public function createCustomer() {
+        $users = User::where('rol_id', 3)->whereNull('deleted_at')->get();
+        $consultants = User::where('rol_id', 2)->whereNull('deleted_at')->get();
+
+        return view('customer.create', compact('users', 'consultants'));
     }
 
     public function store(Request $request) {

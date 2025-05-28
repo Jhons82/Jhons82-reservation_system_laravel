@@ -32,7 +32,7 @@
                 @if (Auth::user()->rol_id === 3)
                     <li class="menu-title"><span>cliente</span></li>
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#">
+                        <a class="nav-link menu-link" href="{{ route('customer.create') }}">
                             <i class="ri-reserved-line"></i> <span data-key="t-dashboards">Nueva Reserva</span>
                         </a>
                     </li>
