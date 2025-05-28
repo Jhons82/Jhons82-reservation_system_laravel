@@ -33,16 +33,16 @@ Route::get('adviser/calendar', function() {
 Route::get('/adviser/fullcalendar', [ReservationController::class, 'getAllReservationsAdviser'])->name('reservationsAdviser.data');
 
 //Calendar for clients
-Route::get('customer/calendar', function() {
-    return view('customer.calendar');
-})->name('customer.calendar');
-Route::get('/customer/fullcalendar', [ReservationController::class, 'getAllReservationsCustomer'])->name('reservationsCustomer.data');
+Route::get('client/calendar', function() {
+    return view('client.calendar');
+})->name('client.calendar');
+Route::get('/client/fullcalendar', [ReservationController::class, 'getAllReservationsClient'])->name('reservationsClient.data');
 
 //index for clients
-Route::get('/customer', [ReservationController::class, 'indexCustomer'])->name('customer.index');
+Route::get('/client', [ReservationController::class, 'indexClient'])->name('client.index');
 
 //Create for clients
-Route::get('/customer/create', [ReservationController::class, 'createCustomer'])->name('customer.create');
+Route::get('/client/create', [ReservationController::class, 'createClient'])->name('client.create');
 
 Route::resource('usuarios', UserController::class);
 

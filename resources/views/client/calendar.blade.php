@@ -128,7 +128,7 @@
                     day: 'Día',
                 },
                 events: {
-                    url: '{{ route('reservationsCustomer.data') }}',
+                    url: '{{ route('reservationsClient.data') }}',
                     method: 'GET',
                     failure() {
                         alert('¡Hubo un error al obtener eventos!');

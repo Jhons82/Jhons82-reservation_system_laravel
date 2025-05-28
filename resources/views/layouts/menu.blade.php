@@ -32,17 +32,17 @@
                 @if (Auth::user()->rol_id === 3)
                     <li class="menu-title"><span>cliente</span></li>
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{ route('customer.create') }}">
+                        <a class="nav-link menu-link" href="{{ route('client.create') }}">
                             <i class="ri-reserved-line"></i> <span data-key="t-dashboards">Nueva Reserva</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{ route('customer.index') }}" >
+                        <a class="nav-link menu-link" href="{{ route('client.index') }}" >
                             <i class="ri-stack-line"></i> <span data-key="t-apps">Consultar Reserva</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{ route('customer.calendar') }}">
+                        <a class="nav-link menu-link" href="{{ route('client.calendar') }}">
                             <i class="ri-calendar-todo-line"></i> <span data-key="t-layouts">Calendario</span>
                         </a>
                     </li> 

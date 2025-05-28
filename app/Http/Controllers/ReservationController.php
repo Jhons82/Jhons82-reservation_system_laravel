@@ -16,11 +16,11 @@ class ReservationController extends Controller
         return view('reservations.index', compact('reservations'));
     }
 
-    //Index - Customer
-    public function indexCustomer() {
+    //Index - Client
+    public function indexClient() {
         $customerId = Auth::user()->id;
         $reservations = Reservation::where('user_id', $customerId)->get();
-        return view('customer.index', compact('reservations'));
+        return view('client.index', compact('reservations'));
     }
     //Create - Admin
     public function create() {
@@ -29,12 +29,12 @@ class ReservationController extends Controller
 
         return view('reservations.create', compact('users', 'consultants'));
     }
-    //Create - Custoner
-    public function createCustomer() {
+    //Create - Client
+    public function createClient() {
         $users = User::where('rol_id', 3)->whereNull('deleted_at')->get();
         $consultants = User::where('rol_id', 2)->whereNull('deleted_at')->get();
 
-        return view('customer.create', compact('users', 'consultants'));
+        return view('client.create', compact('users', 'consultants'));
     }
 
     public function store(Request $request) {
@@ -201,7 +201,7 @@ class ReservationController extends Controller
     }
 
     //Información en JSON para Calendar - Rol: Cliente
-    public function getAllReservationsCustomer() {
+    public function getAllReservationsClient() {
 
         $userId = Auth::user()->id;
         $reservations = Reservation::where('user_id', $userId)->get();
