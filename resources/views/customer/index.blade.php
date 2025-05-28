@@ -50,8 +50,10 @@
                                     </td>
                                     <td><span class="{{ $reservation->reservation_badge_class }}">{{ $reservation->reservation_status }}</span></td>
                                     <td>
-                                        @if ($reservation->reservation_status != 'Cancelada')
-                                            <button type="button" class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill btn-cancel"><i class="ri-delete-bin-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
+                                        @if ($reservation->reservation_status == 'Cancelada')
+                                            <button class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill btn-cancel" disabled><i class="ri-delete-bin-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
+                                        @else
+                                            <button type="button" class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill btn-cancel" data-id="{{ $reservation->id }}"><i class="ri-delete-bin-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
                                         @endif
                                     </td>
                                 </tr>
@@ -86,7 +88,7 @@
             });
         });
 
-        /* $(document).on('click','.btn-cancel', function(e) {
+        $(document).on('click','.btn-cancel', function(e) {
             e.preventDefault();
             var reservationId = $(this).data('id');
             
@@ -150,7 +152,7 @@
                     }
                 }
             });
-        }) */
+        });
     </script>
     @if (session('success'))
         <script>
