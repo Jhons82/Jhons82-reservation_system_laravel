@@ -34,10 +34,13 @@
                         <!-- consultants -->
                         <div class="col-md-3">
                             <label for="consultant_id" class="form-label">{{ __('Consultor') }}</label>
-                            <select class="form-select @error('consultant_id') is-invalid @enderror" id="consultant_id" name="consultant_id" required>
-                                <option value="" disabled selected>Seleccione un Consultor</option>
+                            <select class="form-select js-example-basic-single @error('consultant_id') is-invalid @enderror"
+                                    id="consultant_id" name="consultant_id" required>
+                                <option value="" disabled selected>Seleccione un Asesor</option>
                                 @foreach ($consultants as $consultant)
-                                    <option value="{{ $consultant->id }}" {{ old('consultant_id') == $consultant->id ? 'selected' : '' }}>{{ $consultant->nombres }} {{ $consultant->apellidos }}</option>
+                                    <option value="{{ $consultant->id }}" {{ old('consultant_id') == $consultant->id ? 'selected' : '' }}>
+                                        {{ $consultant->nombres }} {{ $consultant->apellidos }}
+                                    </option>
                                 @endforeach
                             </select>
                             @error('consultant_id')
@@ -59,7 +62,7 @@
                         <!-- Hora de Inicio -->
                         <div class="col-md-3">
                             <label for="start_time" class="form-label">{{ __('Hora de Inicio') }}</label>
-                            <select class="form-select @error('start_time') is-invalid @enderror" id="start_time" name="start_time" required>
+                            <select class="form-select js-example-basic-single @error('start_time') is-invalid @enderror" id="start_time" name="start_time" required>
                                 <option value="" disabled selected>Seleccione una hora</option>
                                 <option value="09:00">09:00</option>
                                 <option value="10:00">10:00</option>
@@ -89,7 +92,7 @@
                         <!-- Estado de la Reservación -->
                         <div class="col-md-3">
                             <label for="reservation_status" class="form-label">{{ __('Estado de Reservación') }}</label>
-                            <select class="form-select @error('reservation_status') is-invalid @enderror" id="reservation_status" name="reservation_status" required>
+                            <select class="form-select js-example-basic-single @error('reservation_status') is-invalid @enderror" id="reservation_status" name="reservation_status" required>
                                 <option value="" disabled selected>Seleccione un Estado</option>
                                 <option value="confirmada">Confirmada</option>
                                 <option value="pendiente">Pendiente</option>
@@ -181,5 +184,13 @@
                 });
             },
         }).render('#paypal-button-container');
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2({
+                /* placeholder: 'Seleccione un Asesor', */
+            });
+        });
     </script>
 @endpush
