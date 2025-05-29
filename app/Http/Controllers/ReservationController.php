@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Reservation;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use APP\Models\ReservationDetail;
 
 class ReservationController extends Controller
 {
@@ -235,4 +236,58 @@ class ReservationController extends Controller
         return response()->json($events);
     }
 
+    public function completePayment(Request $request) {
+        $request->validate([
+            'orderID' => 'required',
+            'details' => 'required',
+            'user_id' => 'required|exists:users,id',
+            'consultant_id' => 'required|exists:users,id',
+            'reservation_date' => 'required|date',
+            'start_time' => 'required|date_format:H:i|after_or_equal:09:00|before_or_equal:16:00',
+            'end_time' => 'required|date_format:H:i|before_or_equal:17:00',
+            'total_amount' => 'required|numeric|min:0',
+        ]);
+
+        $details = $request->details;
+        $payment_status = $details['status'];
+
+        if ($payment_status === 'COMPLETED') {
+            try {
+                $reservation = Reservation::create([
+                    'user_id' =>$request->user_id,
+                    'consultant_id' => $request->consultant_id,
+                    'reservation_date' => $request->reservation_date,
+                    'start_time' => $request->start_time,
+                    'end_time' => $request->end_time,
+                    'reservation_status' => 'Confirmada',
+                    'payment_status' => 'Pagado',
+                    'total_amount' => $request->total_amount,
+                ]);
+
+                $transaction_id = $details['id'] ?? null;
+                $payer_id = $details['payer']['payer_id'] ?? null;
+                $payer_email = $details['payer']['email_address'] ?? null;
+                $amount = $details['purchase_units'][0]['amount']['value'] ?? null;
+
+                ReservationDetail::create([
+                    'reservation_id' => $reservation->id,
+                    'transaction_id'=> $transaction_id,
+                    'payer_id' => $payer_id,
+                    'payer_email' => $payer_email,
+                    'payment_status' => $reservation->payment_status,
+                    'amount' => $amount,
+                    'response_json' => json_encode($details),
+                ]);
+                return response()->json(['success' => true, 'reservation_id' => $reservation->id]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'error' =>'Error al procesar el pago o guardar la reservación',
+                    'message' => $e->getMessage(),
+                ], 500);
+            }
+            
+        }else {
+            return response()->json(['error' => 'Pago no completado'], 400);
+        }
+    }
 }

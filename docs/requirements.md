@@ -13,7 +13,9 @@ TODO: MIGRACIONES - Crear migraciones con:
    1. php artisan make:migration create_rol_table
 6. TODO: Create migration - add estado in categorias table (si se necesita agregar un campo extra en una tabla ya existente)
    1. php artisan make:migration add_estado_to_rol --table=categorias
-7. TODO: Migrating laravel database to the main database
+7. Ejecutar solo una migración
+   1. php artisan migrate --path=/database/migrations/NOMBRE_DEL_ARCHIVO.php
+8. TODO: Migrating laravel database to the main database
    1. php artisan migrate
    
 TODO: Models - Crear Models con:
