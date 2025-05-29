@@ -28,7 +28,7 @@
                         <!-- users -->
                         <div class="col-md-3">
                             <label for="user_id" class="form-label">{{ __('Usuario') }}</label>
-                            <select class="form-select @error('user_id') is-invalid @enderror" id="user_id" name="user_id" required>
+                            <select class="form-select js-example-basic-single @error('user_id') is-invalid @enderror" id="user_id" name="user_id" required>
                                 <option value="" disabled selected>Seleccione un usuario</option>
                                 @foreach ($users as $user)
                                     <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>{{ $user->nombres }} {{ $user->apellidos }}</option>
@@ -43,7 +43,7 @@
                         <!-- consultants -->
                         <div class="col-md-3">
                             <label for="consultant_id" class="form-label">{{ __('Consultor') }}</label>
-                            <select class="form-select @error('consultant_id') is-invalid @enderror" id="consultant_id" name="consultant_id" required>
+                            <select class="form-select js-example-basic-single @error('consultant_id') is-invalid @enderror" id="consultant_id" name="consultant_id" required>
                                 <option value="" disabled selected>Seleccione un Consultor</option>
                                 @foreach ($consultants as $consultant)
                                     <option value="{{ $consultant->id }}" {{ old('consultant_id') == $consultant->id ? 'selected' : '' }}>{{ $consultant->nombres }} {{ $consultant->apellidos }}</option>
@@ -68,7 +68,7 @@
                         <!-- Hora de Inicio -->
                         <div class="col-md-3">
                             <label for="start_time" class="form-label">{{ __('Hora de Inicio') }}</label>
-                            <select class="form-select @error('start_time') is-invalid @enderror" id="start_time" name="start_time" required>
+                            <select class="form-select js-example-basic-single @error('start_time') is-invalid @enderror" id="start_time" name="start_time" required>
                                 <option value="" disabled selected>Seleccione una hora</option>
                                 <option value="09:00">09:00</option>
                                 <option value="10:00">10:00</option>
@@ -98,7 +98,7 @@
                         <!-- Estado de la Reservación -->
                         <div class="col-md-3">
                             <label for="reservation_status" class="form-label">{{ __('Estado de Reservación') }}</label>
-                            <select class="form-select @error('reservation_status') is-invalid @enderror" id="reservation_status" name="reservation_status" required>
+                            <select class="form-select js-example-basic-single @error('reservation_status') is-invalid @enderror" id="reservation_status" name="reservation_status" required>
                                 <option value="" disabled selected>Seleccione un Estado</option>
                                 <option value="confirmada">Confirmada</option>
                                 <option value="pendiente">Pendiente</option>
@@ -122,7 +122,7 @@
                         <!-- Estado de Pago -->
                         <div class="col-md-3">
                             <label for="payment_status" class="form-label">{{ __('Estado de Pago') }}</label>
-                            <select class="form-select @error('payment_status') is-invalid @enderror" id="payment_status" name="payment_status" required>
+                            <select class="form-select js-example-basic-single @error('payment_status') is-invalid @enderror" id="payment_status" name="payment_status" required>
                                 <option value="" disabled selected>Seleccione un Estado</option>
                                 <option value="pagado">Pagado</option>
                                 <option value="pendiente">Pendiente</option>
@@ -179,13 +179,9 @@
             }
         })
     </script>
-    {{-- @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif --}}
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2({});
+        });
+    </script>
 @endpush
