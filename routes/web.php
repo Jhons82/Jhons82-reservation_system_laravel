@@ -44,6 +44,8 @@ Route::get('/client', [ReservationController::class, 'indexClient'])->name('clie
 //Create for clients
 Route::get('/client/create', [ReservationController::class, 'createClient'])->name('client.create');
 
+Route::post('/paypal', [ReservationController::class], 'completePayment');
+
 Route::resource('usuarios', UserController::class);
 
 Route::resource('reservations', ReservationController::class);

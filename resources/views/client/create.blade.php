@@ -23,7 +23,7 @@
                     <h4 class="card-title mb-0 flex-grow-1">Crear Reservación</h4>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('reservations.store') }}" method="POST" class="row g-3 needs-validation" novalidate>
+                    <form class="row g-3 needs-validation" id="reservationForm" novalidate>
                         @csrf
                         <!-- users -->
                         <div class="col-md-3">
@@ -62,7 +62,7 @@
                         <!-- Hora de Inicio -->
                         <div class="col-md-3">
                             <label for="start_time" class="form-label">{{ __('Hora de Inicio') }}</label>
-                            <select class="form-select js-example-basic-single @error('start_time') is-invalid @enderror" id="start_time" name="start_time" required>
+                            <select class="form-select @error('start_time') is-invalid @enderror" id="start_time" name="start_time" required>
                                 <option value="" disabled selected>Seleccione una hora</option>
                                 <option value="09:00">09:00</option>
                                 <option value="10:00">10:00</option>
@@ -134,7 +134,7 @@
 
 @push('scripts')
 
-    <script src="https://www.paypal.com/sdk/js?client-id=client-id"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AdBntU0UO2PwzhIB2xosgY-eK8ShWU8uNfWXjuaTGVnewouigUR_QnZNMkpg65cn-QxchnyQmzLfez4K"></script>
 
     <script>
         /* reservation_date */
@@ -143,7 +143,7 @@
 
         const pricePerHour = 50.00; // Precio por hora
 
-        /* Start_time */
+        /* Start_time, calcular hora de fin y total */
         document.getElementById('start_time').addEventListener('change', function() {
             const startTime = this.value;
 
@@ -167,30 +167,49 @@
             }
         });
 
-        paypal.Buttons({
-            createOrder: function(data, actions) {
-                return actions.order.create({
-                    purchase_units : [{
-                        amount : {
-                            value : '50.00'
-                        }
-                    }]
-                })
-            },
-            onApprove : function(data, actions) {
-                return actions.order.capture().then(function(details) {
-                    console.log(details);
-                    alert('Pago completado por ' + details.payer.name.given_name);
-                });
-            },
-        }).render('#paypal-button-container');
+        document.addEventListener('DOMContentLoaded', function() {
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    const consultantId = document.getElementById('consultant_id').value;
+                    const reservationDate = document.getElementById('reservation_date').value;
+                    const startTime = document.getElementById('start_time').value;
+                    const endTime = document.getElementById('end_time').value;
+                    const reservationStatus = document.getElementById('reservation_status').value;
+                    const totalAmount = document.getElementById('total_amount').value;
+
+                    if (!consultantId || !reservationDate || !startTime || !endTime || !reservationStatus || !totalAmount) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Faltan Campos Obligatorios',
+                            text: '¡Algunos datos están incompletos. Verifica e intenta nuevamente!',
+                            showConfirmButton: false,
+                            timer: 3000,
+                        });
+                        return Promise.reject();
+                    } else {
+                        
+                    }
+                    return actions.order.create({
+                        purchase_units : [{
+                            amount : {
+                                value : totalAmount
+                            }
+                        }]
+                    })
+                },
+                onApprove : function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        console.log(details);
+                        alert('Pago completado por ' + details.payer.name.given_name);
+                    });
+                },
+            }).render('#paypal-button-container');
+        });
     </script>
 
     <script>
         $(document).ready(function() {
-            $('.js-example-basic-single').select2({
-                /* placeholder: 'Seleccione un Asesor', */
-            });
+            $('.js-example-basic-single').select2({});
         });
     </script>
 @endpush
