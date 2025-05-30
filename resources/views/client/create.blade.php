@@ -115,15 +115,8 @@
                         </div>
                         <!-- Estado de Pago -->
                         <div class="col-md-3">
-                            <label for="payment_status" class="form-label">{{ __('Método de Pago') }}</label>
+                            <p class="form-label fw-bold d-block mb-2">{{ __('Método de Pago') }}</p>
                             <div id="paypal-button-container"></div>
-                        </div>
-                        <!-- Buttons -->
-                        <div class="col-xxl-12 col-md-6">
-                            <button class="btn btn-primary btn-label waves-effect waves-light rounded-pill"><i class="ri-save-2-line label-icon align-middle rounded-pill fs-16 me-2"></i>{{ __('Guardar') }}</button>
-                            <a href="{{ route('reservations.index') }}" class="btn btn-danger btn-label waves-effect waves-light rounded-pill">
-                                <i class=" ri-close-line label-icon align-middle rounded-pill fs-16 me-2"></i>{{ __('Cancelar') }}
-                            </a>
                         </div>
                     </form>
                 </div>
@@ -133,7 +126,6 @@
 @endsection
 
 @push('scripts')
-
     <script src="https://www.paypal.com/sdk/js?client-id=AdBntU0UO2PwzhIB2xosgY-eK8ShWU8uNfWXjuaTGVnewouigUR_QnZNMkpg65cn-QxchnyQmzLfez4K"></script>
 
     <script>
@@ -168,14 +160,15 @@
         });
 
         document.addEventListener('DOMContentLoaded', function() {
+            let consultantId, reservationDate, startTime, endTime, reservationStatus, totalAmount;
             paypal.Buttons({
                 createOrder: function(data, actions) {
-                    const consultantId = document.getElementById('consultant_id').value;
-                    const reservationDate = document.getElementById('reservation_date').value;
-                    const startTime = document.getElementById('start_time').value;
-                    const endTime = document.getElementById('end_time').value;
-                    const reservationStatus = document.getElementById('reservation_status').value;
-                    const totalAmount = document.getElementById('total_amount').value;
+                    consultantId = document.getElementById('consultant_id').value;
+                    reservationDate = document.getElementById('reservation_date').value;
+                    startTime = document.getElementById('start_time').value;
+                    endTime = document.getElementById('end_time').value;
+                    reservationStatus = document.getElementById('reservation_status').value;
+                    totalAmount = document.getElementById('total_amount').value;
 
                     if (!consultantId || !reservationDate || !startTime || !endTime || !reservationStatus || !totalAmount) {
                         Swal.fire({
@@ -186,8 +179,6 @@
                             timer: 3000,
                         });
                         return Promise.reject();
-                    } else {
-                        
                     }
                     return actions.order.create({
                         purchase_units : [{
@@ -199,8 +190,47 @@
                 },
                 onApprove : function(data, actions) {
                     return actions.order.capture().then(function(details) {
-                        console.log(details);
-                        alert('Pago completado por ' + details.payer.name.given_name);
+                        // Lógica después de que se captura el pago
+                        return fetch('/paypal', {
+                            method: 'post',
+                            headers: {
+                                'content-type': 'application/json',
+                                'X-CSRF-TOKEN' : '{{ csrf_token() }}',
+                            },
+                            body : JSON.stringify({
+                                orderID : data.orderID,
+                                details : details,
+                                user_id : {{ auth()->user()->id }},
+                                consultant_id : consultantId,
+                                reservation_date : reservationDate,
+                                start_time : startTime,
+                                end_time : endTime,
+                                total_amount : totalAmount,
+                            })
+                        }).then(function (response) {
+                            if (response.ok) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Pago Completado',
+                                    text: 'Pago y Reservación creada correctamente',
+                                }).then(function () {
+                                    window.location.href = '/client';
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error en el pago',
+                                    text: 'Ocurrió un problema al procesar el pago. Intenta nuevamente.',
+                                });
+                            }
+                        }).catch(function(error){
+                            console.error('Error en la solicitud:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error inesperado',
+                                text: 'No se pudo conectar con el servidor.',
+                            });
+                        });
                     });
                 },
             }).render('#paypal-button-container');

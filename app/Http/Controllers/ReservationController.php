@@ -7,7 +7,9 @@ use App\Models\User;
 use App\Models\Reservation;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use APP\Models\ReservationDetail;
+use App\Models\ReservationDetail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller
 {
@@ -16,7 +18,6 @@ class ReservationController extends Controller
         $reservations = Reservation::with(['user', 'consultant'])->get();
         return view('reservations.index', compact('reservations'));
     }
-
     //Index - Client
     public function indexClient() {
         $customerId = Auth::user()->id;
@@ -239,7 +240,7 @@ class ReservationController extends Controller
     public function completePayment(Request $request) {
         $request->validate([
             'orderID' => 'required',
-            'details' => 'required',
+            'details' => 'required|array',
             'user_id' => 'required|exists:users,id',
             'consultant_id' => 'required|exists:users,id',
             'reservation_date' => 'required|date',
@@ -249,9 +250,10 @@ class ReservationController extends Controller
         ]);
 
         $details = $request->details;
-        $payment_status = $details['status'];
+        $payment_status = $details['status'] ?? null;
 
         if ($payment_status === 'COMPLETED') {
+            DB::beginTransaction();
             try {
                 $reservation = Reservation::create([
                     'user_id' =>$request->user_id,
@@ -267,25 +269,27 @@ class ReservationController extends Controller
                 $transaction_id = $details['id'] ?? null;
                 $payer_id = $details['payer']['payer_id'] ?? null;
                 $payer_email = $details['payer']['email_address'] ?? null;
-                $amount = $details['purchase_units'][0]['amount']['value'] ?? null;
+                $amount = isset($details['purchase_units'][0]['amount']['value']) ? floatval($details['purchase_units'][0]['amount']['value']) : null;
 
                 ReservationDetail::create([
                     'reservation_id' => $reservation->id,
-                    'transaction_id'=> $transaction_id,
-                    'payer_id' => $payer_id,
+                    'transaction_id' => $transaction_id,
+                    'payer_id' =>  $payer_id,
                     'payer_email' => $payer_email,
-                    'payment_status' => $reservation->payment_status,
+                    'payment_status' => $payment_status,
                     'amount' => $amount,
                     'response_json' => json_encode($details),
                 ]);
+                DB::commit();
                 return response()->json(['success' => true, 'reservation_id' => $reservation->id]);
             } catch (\Exception $e) {
+                DB::rollBack();
+                /* \Log::error('Error en completePayment: ' . $e->getMessage()); */
                 return response()->json([
                     'error' =>'Error al procesar el pago o guardar la reservación',
                     'message' => $e->getMessage(),
                 ], 500);
             }
-            
         }else {
             return response()->json(['error' => 'Pago no completado'], 400);
         }

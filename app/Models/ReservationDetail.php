@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ReservationDetail extends Model
 {
+    protected $table = 'reservations_details'; // nombre explícito de la tabla
+
     protected $fillable = [
         'reservation_id',
         'transaction_id',
