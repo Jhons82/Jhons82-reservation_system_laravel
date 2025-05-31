@@ -65,6 +65,8 @@ TODO: Rutas y vistas para breeze
 21. Para vizualizar los nuevos cambios con:
     1.  php artisan serve
 
+TODO: Envío de Alertas con PHP
+composer require phpmailer/phpmailer
 
 TODO: Laravel guarda archivos subidos por los usuarios (como imágenes o documentos) en el disco storage/app/public. Sin embargo, esos archivos no son accesibles desde el navegador por defecto.
    Cuando ejecutas:

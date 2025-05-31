@@ -126,7 +126,7 @@
 @endsection
 
 @push('scripts')
-    <script src="https://www.paypal.com/sdk/js?client-id=AdBntU0UO2PwzhIB2xosgY-eK8ShWU8uNfWXjuaTGVnewouigUR_QnZNMkpg65cn-QxchnyQmzLfez4K"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=client-id"></script>
 
     <script>
         /* reservation_date */

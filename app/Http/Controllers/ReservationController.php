@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\ReservationDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use Illuminate\Support\Facades\View;
 
 class ReservationController extends Controller
 {
@@ -281,6 +284,7 @@ class ReservationController extends Controller
                     'response_json' => json_encode($details),
                 ]);
                 DB::commit();
+                $this->sendConfirmationEmail($reservation);
                 return response()->json(['success' => true, 'reservation_id' => $reservation->id]);
             } catch (\Exception $e) {
                 DB::rollBack();
@@ -292,6 +296,61 @@ class ReservationController extends Controller
             }
         }else {
             return response()->json(['error' => 'Pago no completado'], 400);
+        }
+    }
+
+    //Envio de Alertas
+    public function sendConfirmationEmail($reservation) {
+        $user = User::find($reservation->user_id);
+        $consultant = User::find($reservation->consultant_id);
+
+        //Validación de User y Consultant
+        if (!$user || !$consultant) {
+            Log::error('Usuario o Asesor no encontrado');
+            return back()->with('error', 'Error al encontrar los datos de usuario o asesor.');
+        }
+
+        $mail = new PHPMailer(true);
+
+        try {
+            //Configurar SMTP en PHPMailer
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com'; //smtp.office365.com -> Outlook / Hotmail / Office365
+            $mail->Port = 587;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->SMTPAuth = true;
+            $mail->Username = env('MAIL_USERNAME'); //'tu_email@outlook.com' -> Outlook / Hotmail / Office365
+            $mail->Password = env('MAIL_PASSWORD'); //tucontraseña / contraseña de Aplicación / getenv('GMAIL_APP_PASSWORD')
+
+            //Enviar correo a Usuario
+            $mail->setFrom('jhon969392668@gmail.com', 'J-GOD Reservaciones');
+            $mail->addAddress($user->email);
+
+            //Configuración del Correo
+            $mail->CharSet = 'UTF-8';
+            //Asunto del Correo
+            $mail->Subject = 'Confirmación de Reservación - J-GOD';
+            //Template
+            $html = View::make('emails.reservation', [
+                'userName' => $user->nombres . ' ' .$user->apellidos,
+                'consultantName' => $consultant->nombres . ' ' . $consultant->apellidos,
+                'reservationDate' => $reservation->reservation_date,
+                'startTime' => $reservation->start_time,
+                'endTime' => $reservation->end_time,
+                'reservationStatus' => $reservation->reservation_status,
+                'paymentStatus' => $reservation->payment_status,
+                'totalAmount' => $reservation->total_amount,
+            ])->render();
+
+            //Configurar de correo para soporte de html
+            $mail->isHTML(true);
+            $mail->Body = $html;
+
+            //Enviar Correo
+            $mail->send();
+        } catch(Exception $e) {
+            Log::error('Error en envío de correo: ' .$e->getMessage());
+            return back()->with('error','No se pudo enviar el correo: ' .$e->getMessage());
         }
     }
 }
