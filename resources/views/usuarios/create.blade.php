@@ -46,17 +46,20 @@
                             @enderror
                         </div>
                         <!-- Teléfono -->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="telefono" class="form-label">{{ __('Teléfono') }}</label>
-                            <input type="number" class="form-control @error('telefono') is-invalid @enderror" id="telefono" name="telefono" value="{{ old('telefono') }}" placeholder="Ingrese el teléfono del usuario" required>
-                            @error('telefono')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                            <div class="form-icon right">
+                                <input type="number" class="form-control @error('telefono') is-invalid @enderror" id="telefono" name="telefono" value="{{ old('telefono') }}" placeholder="Ingrese el teléfono del usuario" required>
+                                <i class="ri-phone-line"></i>
+                                @error('telefono')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
                         </div>
                         <!-- Rol -->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="rol_id" class="form-label">{{ __('Rol') }}</label>
                             <select class="form-select @error('rol_id') is-invalid @enderror" id="rol_id" name="rol_id" required>
                                 <option value="" disabled selected>Seleccione un rol</option>
@@ -73,42 +76,43 @@
                         <!-- Email -->
                         <div class="col-md-4">
                             <label for="email" class="form-label">{{ __('Correo Electrónico') }}</label>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" placeholder="Ingrese el correo electrónico del usuario" required autocomplete="email">
-                            @error('email')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                            <div class="form-icon right">
+                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" placeholder="Ingrese el correo electrónico del usuario" required autocomplete="email">
+                                <i class="ri-mail-unread-line"></i>
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
                         </div>
                         <!-- Password -->
                         <div class="col-md-4">
                             <label for="password" class="form-label">{{ __('Contraseña') }}</label>
-                            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Ingrese la contraseña del usuario" required>
-                            @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                            <div class="position-relative auth-pass-inputgroup mb-3">
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Ingrese la contraseña del usuario" required>
+                                <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted" type="button" id="togglePassword"><i class="ri-eye-fill align-middle"></i></button>
+                                @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
                         </div>
-                        <!-- Confirm Password -->
-                        {{-- <div class="col-md-6">
-                            <label for="password_confirmation">{{ __('Confirmar Contraseña') }}</label>
-                            <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirmar Contraseña del usuario" class="form-control @error('password_confirmation') is-invalid @enderror" ...>
-                            @error('password_confirmation')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div> --}}
                         <!-- Foto -->
                         <div class="col-md-4">
                             <label for="foto" class="form-label">{{ __('Foto (Opcional)') }} </label>
-                            <input type="file" class="form-control @error('foto') pe-5 is-invalid @enderror" id="foto" name="foto">
+                            <input type="file" class="form-control @error('foto') pe-5 is-invalid @enderror" id="foto" name="foto" accept="image/*">
+                            {{-- <img id="preview" class="img-thumbnail rounded-circle border shadow-sm mt-2" style="max-width: 200px; height: auto;"> --}}
                             @error('foto')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
+                        </div>
+                        <!-- preview -->
+                        <div class="col-md-4 text-center">
+                            <img id="preview" class="img-thumbnail mt-2" style="max-width: 150px;">
                         </div>
                         <!-- Buttons -->
                         <div class="col-xxl-12 col-md-6">
@@ -123,3 +127,38 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tooglePasswordButton = document.querySelector('#togglePassword');
+            const inputPassword = document.querySelector('#password');
+
+            tooglePasswordButton.addEventListener('click', function() {
+                // Cambiar el tipo de input entre "password" y "text"
+                const type = inputPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+                inputPassword.setAttribute('type', type);
+
+                // Cambiar el icono del botón
+                this.querySelector('i').classList.toggle('ri-eye-fill');
+                this.querySelector('i').classList.toggle('ri-eye-off-fill');
+            });
+        });
+    </script>
+    <script>
+        document.getElementById('foto').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('preview');
+
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = '';
+            }
+        });
+    </script>
+@endpush

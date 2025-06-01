@@ -8,7 +8,7 @@
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Usuario</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Usuarios</a></li>
                         <li class="breadcrumb-item active">Mantenimiento</li>
                     </ol>
                 </div>
@@ -41,7 +41,7 @@
                                     <td>{{ $usuario->nombres }}</td>
                                     <td>{{ $usuario->apellidos }}</td>
                                     <td>{{ $usuario->email }}</td>
-                                    <td>{{ $usuario->telefono }}</td>
+                                    <td>{{ $usuario->telefono }}</td>   
                                     <td><span class="{{ $usuario->rol_badge_class }}">{{ ucfirst($usuario->role->name) }}</span></td>
                                     <td>
                                         <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-warning btn-sm btn-label waves-effect waves-light rounded-pill"><i class="ri-edit-box-line label-icon align-middle rounded-pill fs-16 me-2"></i>Editar</a>

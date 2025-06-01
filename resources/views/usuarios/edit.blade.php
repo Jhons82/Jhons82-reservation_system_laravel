@@ -47,9 +47,12 @@
                             @enderror
                         </div>
                         <!-- Teléfono -->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="telefono" class="form-label">{{ __('Teléfono') }}</label>
-                            <input type="number" class="form-control @error('telefono') is-invalid @enderror" id="telefono" name="telefono" value="{{ old('telefono', $usuario->telefono) }}" placeholder="Ingrese el teléfono del usuario" required>
+                            <div class="form-icon right">
+                                <input type="text" class="form-control @error('telefono') is-invalid @enderror" id="telefono" name="telefono" value="{{ old('telefono', $usuario->telefono) }}" placeholder="Ingrese el teléfono del usuario" required>
+                                <i class="ri-phone-line"></i>
+                            </div>
                             @error('telefono')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -57,7 +60,7 @@
                             @enderror
                         </div>
                         <!-- Rol -->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="rol_id" class="form-label">{{ __('Rol') }}</label>
                             <select class="form-select @error('rol_id') is-invalid @enderror" id="rol_id" name="rol_id" required>
                                 <option value="" disabled selected>Seleccione un rol</option>
@@ -75,7 +78,7 @@
                         <div class="col-md-4">
                             <label for="email" class="form-label">{{ __('Correo Electrónico') }}</label>
                             <div class="form-icon right">
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $usuario->email) }}" placeholder="Ingrese el correo electrónico del usuario" required autocomplete="email">
+                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $usuario->email) }}" placeholder="Ingrese el correo electrónico del usuario" required autocomplete="email" required>
                                 <i class="ri-mail-unread-line"></i>
                             </div>
                             @error('email')
@@ -92,16 +95,20 @@
                         <!-- Foto -->
                         <div class="col-md-4">
                             <label for="foto" class="form-label">{{ __('Foto (Opcional)') }} </label>
-                            <input type="file" class="form-control @error('foto') pe-5 is-invalid @enderror" id="foto" name="foto">
-                            @if ($usuario->foto)
-                                <img src="{{ asset('storage/' . $usuario->foto) }}" alt="Foto de usuario" class="img-thumbnail mt-2" style="max-width: 150px;">
-                                
-                            @endif
+                            <input type="file" class="form-control @error('foto') pe-5 is-invalid @enderror" id="foto" name="foto"  accept="image/*">
                             @error('foto')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
+                        </div>
+                        <!-- Img -->
+                        <div class="col-md-4 d-flex justify-content-center">
+                            @if ($usuario->foto)
+                                <img src="{{ asset('storage/' . $usuario->foto) }}" alt="Foto de usuario" class="img-thumbnail mt-2" style="max-width: 150px;">
+                            @else
+                                <img id="preview" src="" alt="Foto de usuario" class="img-thumbnail mt-2" style="max-width: 150px; display: none;">
+                            @endif
                         </div>
                         <!-- Buttons -->
                         <div class="col-xxl-12 col-md-6">
@@ -116,3 +123,21 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        document.getElementById('foto').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('preview');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+@endpush
