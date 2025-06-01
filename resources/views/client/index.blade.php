@@ -21,14 +21,14 @@
             <div class="card">
                 <div class="card-header d-flex align-items-center">
                     <h5 class="card-title mb-0 flex-grow-1">Registro de Reservaciones</h5>
-                    <a {{-- href="{{ route('reservations.create') }}" --}} class="btn btn-primary btn-label waves-effect waves-light rounded-pill"><i class="ri-user-smile-line label-icon align-middle rounded-pill fs-16 me-2"></i> Nueva Reservación</a>
+                    <a href="{{ route('client.create') }}" class="btn btn-primary btn-label waves-effect waves-light rounded-pill"><i class="ri-user-smile-line label-icon align-middle rounded-pill fs-16 me-2"></i> Nueva Reservación</a>
                 </div>
                 <div class="card-body">
                     <table id="reservationsTable" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
                         <thead>
                             <tr>
                                 <th>N°</th>
-                                <th>Consultor</th>
+                                <th>Asesor</th>
                                 <th>Fecha</th>
                                 <th>H. Inicio</th>
                                 <th>H. Fin</th>
@@ -51,9 +51,9 @@
                                     <td><span class="{{ $reservation->reservation_badge_class }}">{{ $reservation->reservation_status }}</span></td>
                                     <td>
                                         @if ($reservation->reservation_status == 'Cancelada')
-                                            <button class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill btn-cancel" disabled><i class="ri-delete-bin-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
+                                            <button class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill btn-cancel" disabled><i class="ri-close-circle-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
                                         @else
-                                            <button type="button" class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill btn-cancel" data-id="{{ $reservation->id }}"><i class="ri-delete-bin-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
+                                            <button type="button" class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill btn-cancel" data-id="{{ $reservation->id }}"><i class="ri-close-circle-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
                                         @endif
                                     </td>
                                 </tr>

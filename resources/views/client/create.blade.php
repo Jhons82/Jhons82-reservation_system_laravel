@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">Nueva Reserva</h4>
+                <h4 class="mb-sm-0">Nueva Reservación</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
@@ -33,7 +33,7 @@
                         </div>
                         <!-- consultants -->
                         <div class="col-md-3">
-                            <label for="consultant_id" class="form-label">{{ __('Consultor') }}</label>
+                            <label for="consultant_id" class="form-label">{{ __('Asesor') }}</label>
                             <select class="form-select js-example-basic-single @error('consultant_id') is-invalid @enderror"
                                     id="consultant_id" name="consultant_id" required>
                                 <option value="" disabled selected>Seleccione un Asesor</option>

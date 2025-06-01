@@ -8,8 +8,8 @@
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Reservaciones</a></li>
-                        <li class="breadcrumb-item active">Calendario</li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Cliente</a></li>
+                        <li class="breadcrumb-item active">Reservaciones</li>
                     </ol>
                 </div>
 
@@ -73,7 +73,7 @@
                                 <div class="modal-footer">
                                     <div class="hstack gap-2 justify-content-end">
                                         <button type="button" class="btn btn-soft-danger" data-bs-dismiss="modal"><i class="ri-close-line align-bottom"></i> Cerrar</button>
-                                        <button type="button" class="btn btn-soft-primary" data-bs-dismiss="modal"><i class="ri-eye-line"></i> Ver Reservación</button>
+                                        <a href="{{ route('client.index') }}" id="verReservacionesBtn" class="btn btn-soft-primary"><i class="ri-eye-line"></i> Ver Reservaciones</a>
                                     </div>
                                     
                                 </div>
@@ -201,4 +201,15 @@
 
 
     </script>
+    
+    {{-- <script>
+        document.getElementById('verReservacionesBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+            const modal = bootstrap.Modal.getInstance(document.querySelector('#eventModalCalendar')); // Usa el ID real de tu modal
+            modal.hide();
+            setTimeout(function () {
+                window.location.href = "{{ route('client.index') }}";
+            }, 300);
+        });
+    </script> --}}
 @endpush
