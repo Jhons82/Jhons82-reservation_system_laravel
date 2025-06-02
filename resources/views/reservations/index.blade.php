@@ -8,8 +8,8 @@
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Reservaciones</a></li>
-                        <li class="breadcrumb-item active">Lista de Reservaciones</li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Administrador</a></li>
+                        <li class="breadcrumb-item active">Reservacioness</li>
                     </ol>
                 </div>
 
@@ -28,7 +28,7 @@
                         <thead>
                             <tr>
                                 <th>Usuario</th>
-                                <th>Consultor</th>
+                                <th>Asesor</th>
                                 <th>Fecha</th>
                                 <th>H. Inicio</th>
                                 <th>H. Fin</th>
@@ -52,10 +52,10 @@
                                     <td>
                                         @if ($reservation->reservation_status == 'Cancelada')
                                             <button class="btn btn-warning btn-sm btn-label waves-effect waves-light rounded-pill" disabled><i class="ri-edit-box-line label-icon align-middle rounded-pill fs-16 me-2"></i>Editar</button>
-                                            <button class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill btn-cancel" disabled><i class="ri-delete-bin-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
+                                            <button class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill btn-cancel" disabled><i class="ri-close-circle-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
                                         @else
                                             <a href="{{ route('reservations.edit', $reservation->id) }}" class="btn btn-warning btn-sm btn-label waves-effect waves-light rounded-pill"><i class="ri-edit-box-line label-icon align-middle rounded-pill fs-16 me-2"></i>Editar</a>
-                                            <button type="button" class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill btn-cancel" data-id="{{ $reservation->id }}"><i class="ri-delete-bin-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
+                                            <button type="button" class="btn btn-danger btn-sm btn-label waves-effect waves-light rounded-pill btn-cancel" data-id="{{ $reservation->id }}"><i class="ri-close-circle-line label-icon align-middle rounded-pill fs-16 me-2"></i>Cancelar</button>
                                         @endif
                                     </td>
                                 </tr>

@@ -8,8 +8,8 @@
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Reservaciones</a></li>
-                        <li class="breadcrumb-item active">Editar Registro</li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Administrador</a></li>
+                        <li class="breadcrumb-item active">Reservaciones</li>
                     </ol>
                 </div>
 
@@ -43,7 +43,7 @@
                         </div>
                         <!-- consultants -->
                         <div class="col-md-3">
-                            <label for="consultant_id" class="form-label">{{ __('Consultor') }}</label>
+                            <label for="consultant_id" class="form-label">{{ __('Asesor') }}</label>
                             <select class="form-select @error('consultant_id') is-invalid @enderror" id="consultant_id" name="consultant_id" required>
                                 <option value="" disabled selected>Seleccione un Consultor</option>
                                 @foreach ($consultants as $consultant)
