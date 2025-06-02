@@ -66,6 +66,14 @@ class ReservationController extends Controller
             'payment_status' => $request->payment_status,
         ]);
 
+        $this->sendConfirmationEmail($reservation);
+
+        $user=User::find($request->user_id);
+        $userPhone = $user->telefono;
+        if ($userPhone) {
+            $this->sendWhatsAppMessage($userPhone, $this->generateWhatsAppMessage($reservation, $user));
+        }
+
         return redirect()->route('reservations.index')->with('success', 'Reservación creada con éxito');
     }
 
