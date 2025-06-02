@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Illuminate\Support\Facades\View;
+use Twilio\Rest\Client;
 
 class ReservationController extends Controller
 {
@@ -285,6 +286,12 @@ class ReservationController extends Controller
                 ]);
                 DB::commit();
                 $this->sendConfirmationEmail($reservation);
+
+                $user=User::find($request->user_id);
+                $userPhone = $user->telefono;
+                if ($userPhone) {
+                    $this->sendWhatsAppMessage($userPhone, $this->generateWhatsAppMessage($reservation, $user));
+                }
                 return response()->json(['success' => true, 'reservation_id' => $reservation->id]);
             } catch (\Exception $e) {
                 DB::rollBack();
@@ -352,5 +359,30 @@ class ReservationController extends Controller
             Log::error('Error en envío de correo: ' .$e->getMessage());
             return back()->with('error','No se pudo enviar el correo: ' .$e->getMessage());
         }
+    }
+    //Generar Mensaje de WhatsApp
+    protected function generateWhatsAppMessage($reservation, $user) {
+        return "Hola {$user->nombres}"." "."{$user->apellidos}, tu reservación ha sido confirmada.\n".
+            "Fecha de Reservación: {$reservation->reservation_date}\n".
+            "Hora de Inicio: {$reservation->start_time}\n".
+            "Hora de Fin: {$reservation->end_time}\n".
+            "Estado de Reservación: {$reservation->reservation_status}\n".
+            "Costo de Pago:{$reservation->total_amount} USD\n".
+            "Gracias por elegir nuestros servicios.\n".
+            "J-GOD.\n";
+    }
+    //Enviar Mensaje de WhatsApp
+    protected function sendWhatsAppMessage($to, $message) {
+        $sid = env('TWILIO_SID');
+        $token = env('TWILIO_AUTH_TOKEN');
+        $twilio = new Client($sid, $token);
+
+        $twilio->messages->create(
+            "whatsapp:+{$to}",
+            [
+                'from' => env('TWILIO_WHATSAPP_FROM'),
+                'body' => $message,
+            ]
+        );
     }
 }

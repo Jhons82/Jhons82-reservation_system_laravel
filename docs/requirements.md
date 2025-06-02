@@ -68,6 +68,9 @@ TODO: Rutas y vistas para breeze
 TODO: Envío de Alertas con PHP
 composer require phpmailer/phpmailer
 
+TODO: SDK Twilio
+composer require twilio/sdk
+
 TODO: Laravel guarda archivos subidos por los usuarios (como imágenes o documentos) en el disco storage/app/public. Sin embargo, esos archivos no son accesibles desde el navegador por defecto.
    Cuando ejecutas:
    php artisan storage:link
