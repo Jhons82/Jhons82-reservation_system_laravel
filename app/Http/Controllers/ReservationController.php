@@ -393,9 +393,17 @@ class ReservationController extends Controller
             ]
         );
     }
-
+    // Pagos de clientes - Admin
     public function showPayments() {
         $payments = ReservationDetail::with(['reservation.user', 'reservation.consultant'])->get();
         return view('reservations.payments', compact('payments'));
+    }
+    // Pagos unicos del Cliente
+    public function showClientPayments() {
+        $userId = Auth::id();
+        $payments = ReservationDetail::whereHas('reservation', function($query) use ($userId){
+            $query->where('user_id', $userId);
+        })->get();
+        return view('client.payments', compact('payments'));
     }
 }

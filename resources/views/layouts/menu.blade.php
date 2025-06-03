@@ -47,13 +47,13 @@
                         </a>
                     </li> 
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#">
+                        <a class="nav-link menu-link" href="{{ route('client.payments') }}">
                             <i class="ri-secure-payment-line"></i> <span data-key="t-layouts">Pagos</span>
                         </a>
                     </li>
                 @endif
                 
-                @if (Auth::user()->rol_id === 2)    
+                @if (Auth::user()->rol_id === 2)
                     <li class="menu-title"><i class="ri-more-fill"></i> <span>Asesor</span></li>
 
                     <li class="nav-item">
@@ -63,7 +63,7 @@
                     </li>
                 @endif
 
-                @if (Auth::user()->rol_id === 1)    
+                @if (Auth::user()->rol_id === 1)
                     <li class="menu-title"><i class="ri-more-fill"></i> <span>Administrador</span></li>
 
                     <li class="nav-item">
