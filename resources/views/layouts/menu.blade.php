@@ -79,7 +79,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#">
+                        <a class="nav-link menu-link" href="{{ route('reservations.payments') }}">
                             <i class="ri-secure-payment-line"></i> <span>Pagos</span>
                         </a>
                     </li>

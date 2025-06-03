@@ -26,6 +26,8 @@ Route::get('reservations/calendar', function() {
 })->name('reservations.calendar');
 Route::get('/administrator/fullcalendar', [ReservationController::class, 'getAllReservations'])->name('reservations.data');
 
+Route::get('/reservations/payments', [ReservationController::class, 'showPayments'])->name('reservations.payments');
+
 // Calendar for adviser
 Route::get('adviser/calendar', function() {
     return view('adviser.calendar');

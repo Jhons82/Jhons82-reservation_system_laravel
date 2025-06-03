@@ -393,4 +393,9 @@ class ReservationController extends Controller
             ]
         );
     }
+
+    public function showPayments() {
+        $payments = ReservationDetail::with(['reservation.user', 'reservation.consultant'])->get();
+        return view('reservations.payments', compact('payments'));
+    }
 }

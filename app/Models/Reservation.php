@@ -45,4 +45,8 @@ class Reservation extends Model
             default => 'badge badge-soft-secondary',
         };
     }
+
+    public function reservationDetail() {
+        return $this->hasOne(ReservationDetail::class);
+    }
 }
