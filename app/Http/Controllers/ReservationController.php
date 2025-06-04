@@ -213,7 +213,6 @@ class ReservationController extends Controller
 
         return response()->json($events);
     }
-
     //Información en JSON para Calendar - Rol: Cliente
     public function getAllReservationsClient() {
 
@@ -313,7 +312,6 @@ class ReservationController extends Controller
             return response()->json(['error' => 'Pago no completado'], 400);
         }
     }
-
     //Envio de Alertas
     public function sendConfirmationEmail($reservation) {
         $user = User::find($reservation->user_id);
@@ -405,5 +403,38 @@ class ReservationController extends Controller
             $query->where('user_id', $userId);
         })->get();
         return view('client.payments', compact('payments'));
+    }
+    // Dashboard
+    public function dashboard()
+    {
+        $user = Auth::user();
+        $hoy = Carbon::today()->toDateString();
+        $totalReservations = null;
+
+        if ($user->rol_id == 3) {
+            $totalReservations = Reservation::where('user_id', $user->id)->count();
+            // Filtro por fecha de hoy y estado(Confirmada)
+            $totalCurrent = Reservation::where('reservation_date', $hoy)
+                ->where('user_id', $user->id)
+                ->whereIn('reservation_status', ['Confirmada'])
+                ->count();
+        } elseif ($user->rol_id == 1) {
+            $totalReservations = Reservation::count();
+            // Filtro por fecha de hoy y estado(Confirmada)
+            $totalCurrent = Reservation::where('reservation_date', $hoy)
+                ->whereIn('reservation_status', ['Confirmada'])
+                ->count();
+        }
+
+        // Lógica para contar usuarios activos si es admin
+        $totalClientsAssets = null;
+        $totalAdvisersAssets = null;
+
+        if ($user->rol_id == 1 || $user->rol_id == 3) {
+            $totalClientsAssets = User::where('rol_id', 3)->count(); // activos por default
+            $totalAdvisersAssets = User::where('rol_id', 2)->count();
+        }
+
+        return view('dashboard', compact('totalReservations', 'totalClientsAssets', 'totalAdvisersAssets', 'totalCurrent'));
     }
 }
