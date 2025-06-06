@@ -1,22 +1,17 @@
 <!doctype html>
-<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none">
-
+<html lang="es" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none">
     <head>
-
         <meta charset="utf-8" />
-        <title>Landing | J-GOD - Sistema de Reservaciones</title>
+        <title>Landing Page | J-GOD - Sistema de Reservaciones</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesbrand" name="author" />
         <!-- App favicon -->
         <link rel="shortcut icon" href="{{ asset('assets/images/logo_vf.png') }}">
-
         <!-- FullCalendar CSS -->
         <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet" />
-
         <!--Swiper slider css-->
         <link href="{{ asset('assets/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
-
         <!-- Layout config Js -->
         <script src="{{ asset('assets/js/layout.js') }}"></script>
         <!-- Bootstrap Css -->
@@ -27,7 +22,6 @@
         <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
         <!-- custom Css-->
         <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
-
     </head>
 
     <body data-bs-spy="scroll" data-bs-target="#navbar-example">
@@ -397,6 +391,15 @@
             <!-- start cta -->
             <section class="py-5 bg-primary position-relative">
                 <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
+                <div class="container">
+                    <div class="d-flex justify-content-center align-items-center text-white flex-wrap">
+                        <span class="fs-3">Se han registrado&nbsp;</span>
+                        <h2 class="text-success mb-0 fw-semibold fs-1">
+                            <span class="counter-value" data-target="{{ $totalReservations }}">0</span>
+                        </h2>
+                        <span class="fs-3">&nbsp;reservaciones hasta hoy</span>
+                    </div>
+                </div>
             </section>
             <!-- end cta -->
 
@@ -730,7 +733,7 @@
                                 <div>
                                     <i class="ri-double-quotes-l text-success display-3"></i>
                                 </div>
-                                <h4 class="text-white mb-5"><span class="text-success">+19 mil</span> clientes satisfechos</h4>
+                                <h4 class="text-white mb-5"><span class="text-success">500</span> clientes satisfechos</h4>
 
                                 <!-- Swiper -->
                                 <div class="swiper client-review-swiper rounded" dir="ltr">
@@ -801,34 +804,31 @@
             <section class="py-5 position-relative bg-light">
                 <div class="container">
                     <div class="row text-center gy-4">
-                        <!-- Citas realizadas -->
+                        <!-- Reservaciones confirmadas -->
                         <div class="col-lg-3 col-6">
                             <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="1000">0</span>+</h2>
-                                <div class="text-muted">Citas Realizadas</div>
+                                <h2 class="mb-2"><span class="counter-value" data-target="{{ $totalConfirmed }}">0</span></h2>
+                                <div class="text-muted">Reservaciones Confirmadas</div>
                             </div>
                         </div>
-
-                        <!-- Reseñas positivas -->
+                        <!-- Reservaciones hoy -->
                         <div class="col-lg-3 col-6">
                             <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="800">0</span>+</h2>
-                                <div class="text-muted">Reseñas Positivas</div>
+                                <h2 class="mb-2"><span class="counter-value" data-target="{{ $totalDay }}">0</span></h2>
+                                <div class="text-muted">Reservaciones de Hoy</div>
                             </div>
                         </div>
-
-                        <!-- Clientes satisfechos -->
+                        <!-- Clientes activos -->
                         <div class="col-lg-3 col-6">
                             <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="20.3">0</span>k</h2>
-                                <div class="text-muted">Clientes Satisfechos</div>
+                                <h2 class="mb-2"><span class="counter-value" data-target="{{ $totalClientsAssets }}">0</span></h2>
+                                <div class="text-muted">Clientes Activos</div>
                             </div>
                         </div>
-
                         <!-- Asesores activos -->
                         <div class="col-lg-3 col-6">
                             <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="50">0</span></h2>
+                                <h2 class="mb-2"><span class="counter-value" data-target="{{ $totalAdvisersAssets }}">0</span></h2>
                                 <div class="text-muted">Asesores Activos</div>
                             </div>
                         </div>
@@ -922,154 +922,28 @@
 
                     <!-- Tarjetas de miembros del equipo -->
                     <div class="row">
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="card">
-                                <div class="card-body text-center p-4">
-                                    <div class="avatar-xl mx-auto mb-4 position-relative">
-                                        <img src="assets/images/users/avatar-2.jpg" alt="" class="img-fluid rounded-circle">
-                                        <a href="apps-mailbox.html" class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
-                                            <div class="avatar-title bg-transparent">
-                                                <i class="ri-mail-fill align-bottom"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <h5 class="mb-1"><a href="pages-profile.html" class="text-body">Nancy Martino</a></h5>
-                                    <p class="text-muted mb-0 ff-secondary">Líder de Equipo</p>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="row">
+                            @foreach($advisers as $adviser)
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="card">
+                                        <div class="card-body text-center p-4">
+                                            <div class="avatar-xl mx-auto mb-4 position-relative">
+                                                <img src="{{ $adviser->foto ? asset('storage/' . $adviser->foto) : asset('assets/images/users/user-dummy-img.jpg') }}" alt="{{ $adviser->nombres }} {{ $adviser->apellidos }}" class="img-fluid rounded-circle">
 
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="card">
-                                <div class="card-body text-center p-4">
-                                    <div class="avatar-xl mx-auto mb-4 position-relative">
-                                        <img src="assets/images/users/avatar-10.jpg" alt="" class="img-fluid rounded-circle">
-                                        <a href="apps-mailbox.html" class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
-                                            <div class="avatar-title bg-transparent">
-                                                <i class="ri-mail-fill align-bottom"></i>
+                                                <a href="mailto:{{ $adviser->email }}" class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
+                                                    <div class="avatar-title bg-transparent">
+                                                        <i class="ri-mail-fill align-bottom"></i>
+                                                    </div>
+                                                </a>
                                             </div>
-                                        </a>
+                                            <h5 class="mb-1"><a class="text-body">{{ $adviser->nombres }} {{ $adviser->apellidos }}</a></h5>
+                                            <p class="text-muted mb-0 ff-secondary">{{ $adviser->position ?? 'Asesor' }}</p>
+                                        </div>
                                     </div>
-                                    <h5 class="mb-1"><a href="pages-profile.html" class="text-body">Henry Baird</a></h5>
-                                    <p class="text-muted mb-0 ff-secondary">Asesor Senior</p>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="card">
-                                <div class="card-body text-center p-4">
-                                    <div class="avatar-xl mx-auto mb-4 position-relative">
-                                        <img src="assets/images/users/avatar-3.jpg" alt="" class="img-fluid rounded-circle">
-                                        <a href="apps-mailbox.html" class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
-                                            <div class="avatar-title bg-transparent">
-                                                <i class="ri-mail-fill align-bottom"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <h5 class="mb-1"><a href="pages-profile.html" class="text-body">Frank Hook</a></h5>
-                                    <p class="text-muted mb-0 ff-secondary">Coordinador de Reservas</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="card">
-                                <div class="card-body text-center p-4">
-                                    <div class="avatar-xl mx-auto mb-4 position-relative">
-                                        <img src="assets/images/users/avatar-8.jpg" alt="" class="img-fluid rounded-circle">
-                                        <a href="apps-mailbox.html" class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
-                                            <div class="avatar-title bg-transparent">
-                                                <i class="ri-mail-fill align-bottom"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <h5 class="mb-1"><a href="pages-profile.html" class="text-body">Donald Palmer</a></h5>
-                                    <p class="text-muted mb-0 ff-secondary">Diseñador de Experiencia</p>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
-
-                    <!-- Segunda fila -->
-                    <div class="row">
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="card">
-                                <div class="card-body text-center p-4">
-                                    <div class="avatar-xl mx-auto mb-4 position-relative">
-                                        <img src="assets/images/users/avatar-5.jpg" alt="" class="img-fluid rounded-circle">
-                                        <a href="apps-mailbox.html" class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
-                                            <div class="avatar-title bg-transparent">
-                                                <i class="ri-mail-fill align-bottom"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <h5 class="mb-1"><a href="pages-profile.html" class="text-body">Erica Kernan</a></h5>
-                                    <p class="text-muted mb-0 ff-secondary">Diseñadora Web</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="card">
-                                <div class="card-body text-center p-4">
-                                    <div class="avatar-xl mx-auto mb-4 position-relative">
-                                        <img src="assets/images/users/avatar-4.jpg" alt="" class="img-fluid rounded-circle">
-                                        <a href="apps-mailbox.html" class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
-                                            <div class="avatar-title bg-transparent">
-                                                <i class="ri-mail-fill align-bottom"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <h5 class="mb-1"><a href="pages-profile.html" class="text-body">Alexis Clarke</a></h5>
-                                    <p class="text-muted mb-0 ff-secondary">Desarrollador Backend</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="card">
-                                <div class="card-body text-center p-4">
-                                    <div class="avatar-xl mx-auto mb-4 position-relative">
-                                        <img src="assets/images/users/avatar-6.jpg" alt="" class="img-fluid rounded-circle">
-                                        <a href="apps-mailbox.html" class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
-                                            <div class="avatar-title bg-transparent">
-                                                <i class="ri-mail-fill align-bottom"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <h5 class="mb-1"><a href="pages-profile.html" class="text-body">Marie Ward</a></h5>
-                                    <p class="text-muted mb-0 ff-secondary">Desarrolladora Full Stack</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="card">
-                                <div class="card-body text-center p-4">
-                                    <div class="avatar-xl mx-auto mb-4 position-relative">
-                                        <img src="assets/images/users/avatar-7.jpg" alt="" class="img-fluid rounded-circle">
-                                        <a href="apps-mailbox.html" class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
-                                            <div class="avatar-title bg-transparent">
-                                                <i class="ri-mail-fill align-bottom"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <h5 class="mb-1"><a href="pages-profile.html" class="text-body">Jack Gough</a></h5>
-                                    <p class="text-muted mb-0 ff-secondary">Desarrollador React</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Botón de ver más -->
-                    {{-- <div class="row">
-                        <div class="col-lg-12">
-                            <div class="text-center mt-2">
-                                <a href="pages-team.html" class="btn btn-primary">Ver Todos los Miembros <i class="ri-arrow-right-line ms-1 align-bottom"></i></a>
-                            </div>
-                        </div>
-                    </div> --}}
                 </div>
             </section>
             <!-- end team -->

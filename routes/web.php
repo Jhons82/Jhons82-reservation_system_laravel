@@ -9,6 +9,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/', [ReservationController::class, 'welcome']);
+
 Route::get('/dashboard', [ReservationController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');

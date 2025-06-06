@@ -484,4 +484,25 @@ class ReservationController extends Controller
 
         return view('dashboard', compact('totalReservations', 'totalClientsAssets', 'totalAdvisersAssets', 'totalCurrent'));
     }
+    // Welcome
+    public function welcome() {
+        // Conteo de todas las reservaciones existentes
+        $totalReservations = Reservation::count();
+
+        // Conteo de reservaciones de hoy
+        $hoy = Carbon::today()->toDateString();
+        $totalDay = Reservation::whereDate('reservation_date', $hoy)->count();
+
+        // Conteo de reservaciones "Confirmada"
+        $totalConfirmed = Reservation::where('reservation_status', 'Confirmada')->count();
+
+        // Conteo de clientes y asesores
+        $totalClientsAssets = User::where('rol_id', 3)->count();    // clientes rol_id = 3
+        $totalAdvisersAssets = User::where('rol_id', 2)->count();   // asesores rol_id = 2
+
+        // Obtener asesores con toda su info
+        $advisers = User::where('rol_id', 2)->get();
+
+        return view('welcome', compact('totalReservations', 'totalDay', 'totalConfirmed', 'totalClientsAssets', 'totalAdvisersAssets', 'advisers'));
+    }
 }
