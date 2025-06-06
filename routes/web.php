@@ -40,6 +40,9 @@ Route::get('client/calendar', function() {
 })->name('client.calendar');
 Route::get('/client/fullcalendar', [ReservationController::class, 'getAllReservationsClient'])->name('reservationsClient.data');
 
+// Landing Page
+Route::get('welcome/fullcalendar', [ReservationController::class, 'getAllReservationsLandingPage'])->name('welcome.data');
+
 //index for clients
 Route::get('/client', [ReservationController::class, 'indexClient'])->name('client.index');
 

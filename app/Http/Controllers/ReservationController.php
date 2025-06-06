@@ -17,25 +17,25 @@ use Twilio\Rest\Client;
 
 class ReservationController extends Controller
 {
-    //Index -Admin
+    // Index -Admin
     public function index() {
         $reservations = Reservation::with(['user', 'consultant'])->get();
         return view('reservations.index', compact('reservations'));
     }
-    //Index - Client
+    // Index - Client
     public function indexClient() {
         $customerId = Auth::user()->id;
         $reservations = Reservation::where('user_id', $customerId)->get();
         return view('client.index', compact('reservations'));
     }
-    //Create - Admin
+    // Create - Admin
     public function create() {
         $users = User::where('rol_id', 3)->whereNull('deleted_at')->get();
         $consultants = User::where('rol_id', 2)->whereNull('deleted_at')->get();
 
         return view('reservations.create', compact('users', 'consultants'));
     }
-    //Create - Client
+    // Create - Client
     public function createClient() {
         $users = User::where('rol_id', 3)->whereNull('deleted_at')->get();
         $consultants = User::where('rol_id', 2)->whereNull('deleted_at')->get();
@@ -131,7 +131,7 @@ class ReservationController extends Controller
             'message' => 'Reservación cancelada con éxito'
         ]);
     }
-    //Información en JSON para Calendar - Rol: Administrador
+    // Información en JSON para Calendar - Rol: Administrador
     public function getAllReservations() {
         // Cargar solo las relaciones y campos necesarios
         $reservations = Reservation::with([
@@ -179,7 +179,55 @@ class ReservationController extends Controller
 
         return response()->json($events);
     }
-    //Información en JSON para Calendar - Rol: Asesor
+    // Información en JSON para Calendar - Rol: Administrador
+    public function getAllReservationsLandingPage() {
+        // Cargar solo las relaciones y campos necesarios
+        $reservations = Reservation::with([
+            'user:id,nombres,apellidos',
+            'consultant:id,nombres,apellidos',
+        ])->get([
+            'id',
+            'user_id',
+            'consultant_id',
+            'reservation_date',
+            'start_time',
+            'end_time',
+            'reservation_status',
+            'payment_status',
+            'total_amount',
+            'cancellation_reason',
+        ]);
+
+        $events = $reservations->map(function ($reservation) {
+            $startTimeFormatted = Carbon::parse($reservation->start_time)->format('g:i A');
+            $endTimeFormatted = Carbon::parse($reservation->end_time)->format('g:i A');
+
+            $statusColor = match ($reservation->reservation_status) {
+                'Confirmada' => ['#cfe2ff', '#084298'],
+                'Pendiente'  => ['#d1ecf1', '#0c5460'],
+                default      => ['#f8d7da', '#842029'],
+            };
+
+            return [
+                'id' => $reservation->id,
+                'title' => "Asesor: {$reservation->consultant->nombres} {$reservation->consultant->apellidos}",
+                'start' => $reservation->reservation_date,
+                'time_range' => "{$startTimeFormatted} - {$endTimeFormatted}",
+                'color' => $statusColor[0],
+                'textColor' => $statusColor[1],
+                'description' => "Reservación de {$reservation->user->nombres} {$reservation->user->apellidos} con Consultor: {$reservation->consultant->nombres} {$reservation->consultant->apellidos}",
+                'reservation_status' => $reservation->reservation_status,
+                'payment_status' => $reservation->payment_status,
+                'total_amount' => $reservation->total_amount,
+                'cancellation_reason' => $reservation->cancellation_reason,
+                'badge_class' => $reservation->reservation_badge_class,
+                'payment_badge_class' => $reservation->payment_badge_class,
+            ];
+        });
+
+        return response()->json($events);
+    }
+    // Información en JSON para Calendar - Rol: Asesor
     public function getAllReservationsAdviser() {
 
         $consultantId = Auth::user()->id;
@@ -213,7 +261,7 @@ class ReservationController extends Controller
 
         return response()->json($events);
     }
-    //Información en JSON para Calendar - Rol: Cliente
+    // Información en JSON para Calendar - Rol: Cliente
     public function getAllReservationsClient() {
 
         $userId = Auth::user()->id;
@@ -312,7 +360,7 @@ class ReservationController extends Controller
             return response()->json(['error' => 'Pago no completado'], 400);
         }
     }
-    //Envio de Alertas
+    // Envio de Alertas
     public function sendConfirmationEmail($reservation) {
         $user = User::find($reservation->user_id);
         $consultant = User::find($reservation->consultant_id);
@@ -366,7 +414,7 @@ class ReservationController extends Controller
             return back()->with('error','No se pudo enviar el correo: ' .$e->getMessage());
         }
     }
-    //Generar Mensaje de WhatsApp
+    // Generar Mensaje de WhatsApp
     protected function generateWhatsAppMessage($reservation, $user) {
         return "Hola {$user->nombres}"." "."{$user->apellidos}, tu reservación ha sido confirmada.\n".
             "Fecha de Reservación: {$reservation->reservation_date}\n".
@@ -377,7 +425,7 @@ class ReservationController extends Controller
             "Gracias por elegir nuestros servicios.\n".
             "J-GOD.\n";
     }
-    //Enviar Mensaje de WhatsApp
+    // Enviar Mensaje de WhatsApp
     protected function sendWhatsAppMessage($to, $message) {
         $sid = env('TWILIO_SID');
         $token = env('TWILIO_AUTH_TOKEN');
@@ -405,8 +453,7 @@ class ReservationController extends Controller
         return view('client.payments', compact('payments'));
     }
     // Dashboard
-    public function dashboard()
-    {
+    public function dashboard() {
         $user = Auth::user();
         $hoy = Carbon::today()->toDateString();
         $totalReservations = null;
